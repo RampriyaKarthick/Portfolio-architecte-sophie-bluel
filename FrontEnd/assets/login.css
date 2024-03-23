@@ -1,0 +1,43 @@
+form h2, p{
+    display:flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+form h2 {
+    margin-top:150px;
+}
+
+form input {
+    display: flex;
+    justify-content: center;
+    height:7vh;
+
+}
+
+nav li:nth-child(3) {
+    font-weight: bolder;
+}
+
+.loginClass{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 45%; 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    margin:10px 0;
+     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    
+}
+
+label[for="email"] ,
+label[for="password"]{
+    width: 45%;
+}

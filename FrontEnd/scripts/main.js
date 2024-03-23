@@ -25,4 +25,8 @@ function insertFilter(){
     }
 }
 
-getCategories()
+getCategories();
+
+function loginUser(token){
+    fetch(apiUrl+"/users/login")
+}

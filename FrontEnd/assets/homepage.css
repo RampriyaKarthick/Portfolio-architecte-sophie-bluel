@@ -1,0 +1,32 @@
+.body_class{
+background-color: black;
+padding:10px;
+color:white;
+display:flex;
+justify-content: center;
+}
+.body_class i{
+    margin:2px;
+    font-size:14px;
+    font-weight: 400;
+}
+
+.modify_class{
+    display:flex;
+justify-content: center;
+}
+.modify_class i{
+font-size: large;
+color:#1D6154;
+margin-left:35px;
+}
+.modify_class i span, .body_class h4 span{
+    margin-left:15px;
+    font-family: 'Syne';
+    font-size: 12px;
+    font-weight: 100;
+    letter-spacing: 0.1em;
+}
+.body_class h4 span{
+    font-size: 15px !important;
+}

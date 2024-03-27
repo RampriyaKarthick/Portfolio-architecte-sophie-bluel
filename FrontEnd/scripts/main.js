@@ -97,6 +97,12 @@ function getToken(){
     }
 }
 
+function deleteToken(token){
+        localStorage.removeItem("token")
+        revertModeEdition()
+     
+    }
+
 function modeEdition(){
    let bodyElement = document.getElementById("mode_edition")
    console.log(bodyElement)
@@ -106,14 +112,40 @@ bodyElement.innerHTML = '<div class="body_class">'+
 '</div>'
 }
 
+function revertModeEdition() {
+    let bodyElement = document.getElementById("mode_edition");
+    bodyElement.innerHTML = ''
+    let header = document.querySelector('header');
+        let anchorTag = header.querySelector('a');
+        anchorTag.innerHTML = "login";
+        anchorTag.setAttribute('href', '/login.html');
+  
+}
+
+function logOutButton(){
+    let header = document.querySelector('header');
+    let anchorTag = header.querySelector('a');
+    let token = getToken()
+    if(token){
+        anchorTag.innerHTML = "logout"
+        anchorTag.addEventListener('click', function(e){
+            e.preventDefault()
+            deleteToken()
+        })
+        return true;
+    }
+   
+    return false;
+}
+
+logOutButton();
 
 
-token = getToken()
-console.log(token)
 
-if(token !== false){
+function tokenExist(){
+   let token = getToken()
+   if(token !== false){
     modeEdition()
 }
-else{
-    document.getElementById("mode_edition").innerHTML = ""
 }
+tokenExist()

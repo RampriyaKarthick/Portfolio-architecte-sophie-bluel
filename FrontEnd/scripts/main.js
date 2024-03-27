@@ -45,6 +45,17 @@ function insertFilter(){
     }
 }
 
+function deleteFilter() {
+    let filterOption = document.getElementById("filter-options");
+    if (filterOption) {
+        filterOption.remove(); 
+    }
+}
+
+
+
+
+
 function getWorks(){
     fetch(apiUrl+"/works")
     .then(response => response.json())
@@ -70,7 +81,7 @@ function getWorksByCategoryId(categoryId){
     });
 }
 
-getCategories();
+
 
 function displayWorks(works) {
     document.getElementById("works-container").innerHTML = "";
@@ -97,19 +108,22 @@ function getToken(){
     }
 }
 
-function deleteToken(token){
+function deleteToken(){
         localStorage.removeItem("token")
         revertModeEdition()
      
     }
 
 function modeEdition(){
+
    let bodyElement = document.getElementById("mode_edition")
-   console.log(bodyElement)
+  
 bodyElement.innerHTML = '<div class="body_class">'+
 '<i class="fas fa-edit"></i>'+
 '<h4><span>Mode édition</span></h4>'+
 '</div>'
+deleteFilter()
+
 }
 
 function revertModeEdition() {
@@ -119,7 +133,9 @@ function revertModeEdition() {
         let anchorTag = header.querySelector('a');
         anchorTag.innerHTML = "login";
         anchorTag.setAttribute('href', '/login.html');
-  
+      
+ 
+   
 }
 
 function logOutButton(){
@@ -144,8 +160,12 @@ logOutButton();
 
 function tokenExist(){
    let token = getToken()
-   if(token !== false){
+   if(token){
     modeEdition()
-}
+   }
+   else{
+    getCategories()
+   } 
+
 }
 tokenExist()

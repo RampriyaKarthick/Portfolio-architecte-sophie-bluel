@@ -1,24 +1,26 @@
+
+
 let apiUrl = "http://localhost:5678/api"
 let categories = []
 let token;
 
 function getCategories(){
-   fetch(apiUrl+"/categories")
-    .then(response => response.json())
-    .then(response =>  {
-        console.log(response); 
-        categories = response
-        
-})
-    .then(() => {
-       
-        insertFilter()
-    })
-    .catch(error => {
-        console.error('Error fetching categories:', error);
-    });
-
+    fetch(apiUrl+"/categories")
+        .then(response => response.json())
+        .then(response =>  {
+            console.log(response); 
+            categories = response;
+            insertFilter(); // Call insertFilter only when categories are fetched successfully
+        })
+        .catch(error => {
+            console.error('Error fetching categories:', error);
+        });
 }
+
+function reloadCategories() {
+    getCategories();
+}
+
 
 function insertFilter(){
     let filterOption = document.getElementById("filter-options");
@@ -45,10 +47,12 @@ function insertFilter(){
     }
 }
 
+
 function deleteFilter() {
     let filterOption = document.getElementById("filter-options");
     if (filterOption) {
         filterOption.remove(); 
+        filterOption.innerHTML = '';
     }
 }
 
@@ -122,8 +126,40 @@ bodyElement.innerHTML = '<div class="body_class">'+
 '<i class="fas fa-edit"></i>'+
 '<h4><span>Mode édition</span></h4>'+
 '</div>'
+let bodyElement1 = document.getElementById("mode_edition1")
+bodyElement1.innerHTML = '<div id="modify_class" class="modify_class">'+
+'<h2>Mes Projets</h2>'+
+'<i class="fas fa-edit" id="edit-icon"><span>modifier</span></i>'+
+'</div>'
+let editIcon = document.getElementById("edit-icon");
+console.log(editIcon)
+editIcon.addEventListener("click", function formGalleryAndAddOption(){
+    let form = document.createElement("form");
+
+    form.innerHTML =   `
+    <button type="button" onclick="displayWorks()">Display Works</button>
+    <button type="submit">Add Project</button>
+
+    `
+    console.log(form)
+    document.getElementById('mode_edition1')
+    let editContainer = document.createElement("div");
+    editContainer.classList.add("edit-container");
+    editContainer.appendChild(form);
+
+});
 deleteFilter()
 
+}
+
+
+
+function resetModifyButton(){
+    let bodyElement1 = document.getElementById("mode_edition1")
+bodyElement1.innerHTML = '<div id="modify_class" class="modify_class">'+
+'<h2>Mes Projets</h2>'+
+
+'</div>'
 }
 
 function revertModeEdition() {
@@ -134,7 +170,9 @@ function revertModeEdition() {
         anchorTag.innerHTML = "login";
         anchorTag.setAttribute('href', '/login.html');
       
- 
+getCategories()
+resetModifyButton()
+
    
 }
 
@@ -164,8 +202,8 @@ function tokenExist(){
     modeEdition()
    }
    else{
-    getCategories()
-   } 
-
+    revertModeEdition()
+   }
 }
 tokenExist()
+

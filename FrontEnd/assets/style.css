@@ -191,16 +191,4 @@ footer nav ul {
 	margin: 2em
 }
 
-.body_class{
-	background-color: black;
-	padding:10px;
-	color:white;
-	display:flex;
-	justify-content: center;
-	}
-	.body_class i{
-		margin:2px;
-		font-size:14px;
-		font-weight: 400;
-	}
 

@@ -250,4 +250,29 @@ function closeModal() {
 document.getElementById("edit-icon").addEventListener("click", openModal);
 closeButton.addEventListener("click", closeModal);
 
+window.addEventListener("click", function(event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
+function displayWorks(works) {
+    galleryVue.innerHTML = "";
+    works.forEach(work => {
+        const container = document.createElement("div");
+        container.classList.add("work-container");
+        const img = document.createElement("img");
+        img.src = work.imageUrl;
+        img.alt = work.title;
+        const deleteIcon = document.createElement("i");
+        deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
+        container.appendChild(img);
+        container.appendChild(deleteIcon);
+        galleryVue.appendChild(container);
+   
+        
+      
+    });
+}
+
 })

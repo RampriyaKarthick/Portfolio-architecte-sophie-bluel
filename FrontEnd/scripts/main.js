@@ -59,18 +59,23 @@ function deleteFilter() {
 
 
 
-
-function getWorks(){
-    fetch(apiUrl+"/works")
-    .then(response => response.json())
-    .then(response =>  {
-        console.log(response); 
-        displayWorks(response);
-    })
-    .catch(error => {
-        console.error('Error fetching works:', error);
-    });
+function getWorks() {
+    return fetch(apiUrl + "/works")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching works');
+            }
+            return response.json();
+        })
+        .then(works => {
+            return works;
+        })
+        .catch(error => {
+            console.error('Error fetching works:', error);
+            return []; // Return an empty array in case of an error
+        });
 }
+
 
 function getWorksByCategoryId(categoryId){
     fetch(apiUrl+"/works")
@@ -87,21 +92,59 @@ function getWorksByCategoryId(categoryId){
 
 
 
+// function displayWorks(works) {
+//     document.getElementById("works-container").innerHTML = "";
+//     for (let i = 0; i < works.length; i++) {
+//         let work = works[i];
+//         let workElement = document.createElement("div");
+//         workElement.classList.add("work-class"); 
+//         workElement.innerHTML = `
+//             <figure>
+//                 <img src="${work.imageUrl}" alt="${work.title}">
+//                 <figcaption>${work.title}</figcaption>
+//             </figure>
+//         `;
+//         document.getElementById("works-container").appendChild(workElement);
+//     }
+// }
+
 function displayWorks(works) {
+    const modalDisplayStyle = getComputedStyle(modal).display; // Get the display style of the modal
+    
     document.getElementById("works-container").innerHTML = "";
     for (let i = 0; i < works.length; i++) {
         let work = works[i];
         let workElement = document.createElement("div");
         workElement.classList.add("work-class"); 
-        workElement.innerHTML = `
-            <figure>
-                <img src="${work.imageUrl}" alt="${work.title}">
-                <figcaption>${work.title}</figcaption>
-            </figure>
-        `;
+        
+        // Create the image element
+        const img = document.createElement("img");
+        img.src = work.imageUrl;
+        img.alt = work.title;
+
+        // Create the delete icon element
+        const deleteIcon = document.createElement("div");
+        deleteIcon.classList.add("delete-icon");
+        deleteIcon.innerHTML = "&times;";
+
+        // Add event listener to the delete icon
+        deleteIcon.addEventListener("click", function() {
+            deleteWork(work.id);
+        });
+
+        // Append image and delete icon to work element
+        workElement.appendChild(img);
+
+        // Conditionally append delete icon based on modal display style
+        if (modalDisplayStyle !== "none") {
+            workElement.appendChild(deleteIcon);
+        }
+
+        // Append work element to container
         document.getElementById("works-container").appendChild(workElement);
     }
 }
+
 
 function getToken(){
     if(localStorage.getItem("token")){
@@ -131,23 +174,6 @@ bodyElement1.innerHTML = '<div id="modify_class" class="modify_class">'+
 '<h2>Mes Projets</h2>'+
 '<i class="fas fa-edit" id="edit-icon"><span>modifier</span></i>'+
 '</div>'
-let editIcon = document.getElementById("edit-icon");
-console.log(editIcon)
-editIcon.addEventListener("click", function formGalleryAndAddOption(){
-    let form = document.createElement("form");
-
-    form.innerHTML =   `
-    <button type="button" onclick="displayWorks()">Display Works</button>
-    <button type="submit">Add Project</button>
-
-    `
-    console.log(form)
-    document.getElementById('mode_edition1')
-    let editContainer = document.createElement("div");
-    editContainer.classList.add("edit-container");
-    editContainer.appendChild(form);
-
-});
 deleteFilter()
 
 }
@@ -207,3 +233,7 @@ function tokenExist(){
 }
 tokenExist()
 
+document.addEventListener("DOMContentLoaded", function(){
+const modal = document.getElementById("modal")
+
+})

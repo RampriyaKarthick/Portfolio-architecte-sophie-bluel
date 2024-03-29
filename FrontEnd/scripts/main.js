@@ -235,5 +235,18 @@ tokenExist()
 
 document.addEventListener("DOMContentLoaded", function(){
 const modal = document.getElementById("modal")
+const galleryVue = document.getElementById("galerie")
+const closeButton = document.getElementsByClassName("close")[0]
+const AjoutProjetButton = document.getElementById("ajout-projet-btn")
+
+function openModal(){
+    modal.style.display = "block"
+}
+function closeModal() {
+    modal.style.display = "none";
+}
+
+document.getElementById("edit-icon").addEventListener("click", openModal);
+closeButton.addEventListener("click", closeModal);
 
 })

@@ -241,6 +241,7 @@ const AjoutProjetButton = document.getElementById("ajout-projet-btn")
 
 function openModal(){
     modal.style.display = "block"
+    getWorks().then(works => displayWorks(works));
 }
 function closeModal() {
     modal.style.display = "none";

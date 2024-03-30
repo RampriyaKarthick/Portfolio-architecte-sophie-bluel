@@ -301,4 +301,16 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+    const categories = ["General","Objets", "Appartments", "Hotels & Restaurants"];
+    const categorySelect = document.getElementById("project-category");
+
+    categories.forEach(category => {
+        const option = document.createElement("option");
+      
+        option.text = category;
+        categorySelect.appendChild(option);
+    });
+});
+
 

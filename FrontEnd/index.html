@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="./assets/style.css">
 	<link rel="stylesheet" href="./assets/homepage.css">
 	<link rel="stylesheet" href="./assets/modal.css">
+	<link rel="stylesheet" href="./assets/childmodal.css">
 
     <script src="scripts/main.js" defer ></script>
 
@@ -125,10 +126,6 @@
 
 </div>
 
-</body>
-</html>
-
-
 <div id="modal" class="modal">
 	<div class="modal-content"><span>Galerie photo</span>
 	<span class="close">&times;</span>
@@ -140,3 +137,43 @@
 	</div>
 	</div>
 	</div>
+
+	<div id="child-modal" class="modal">
+		<div class="modal-content"><span>Ajout photo</span>
+			<span id="back-button" class="back"><i class="fas fa-arrow-left"></i></span>
+			<span class="close">&times;</span>
+			<div class="modal-card modal_card1" >
+			
+				<div id="ajout_class" class="ajout_class">
+					<i class="fas fa-camera"></i>
+					<label for="photo-input" class="file-upload-btn">+ Ajouter photo
+						<input type="file" id="photo-input" class="photo-input">
+					</label>
+					<p>jpg,png: 4mo max</p>
+				</div>
+				<div id="image-preview" class="image-preview"></div>
+				<form id="add-photos-form" class="add-photos-form" >
+					<div class="add-photos-form1">
+						<label for="project-title">Titre</label><br>
+						<input type="text" id="project-title" name="project-title" required><br>
+			
+						<label for="project-category">Catégorie</label><br>
+						<select id="project-category" name="project-category" required><br>
+							<!-- Options for categories will be added dynamically via JavaScript -->
+						</select><br>
+					</div>
+					
+					<button type="submit" class="valider_btn">Valider</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+</body>
+</html>
+
+
+
+
+	

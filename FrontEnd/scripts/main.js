@@ -256,6 +256,12 @@ window.addEventListener("click", function(event) {
     }
 });
 
+let childModal = document.getElementById("child-modal");
+
+AjoutProjetButton.addEventListener("click", function() {
+    childModal.style.display = "block";
+});
+
 function displayWorks(works) {
     galleryVue.innerHTML = "";
     works.forEach(work => {
@@ -269,10 +275,30 @@ function displayWorks(works) {
         container.appendChild(img);
         container.appendChild(deleteIcon);
         galleryVue.appendChild(container);
-   
-        
-      
-    });
+   });
 }
 
 })
+
+document.addEventListener("DOMContentLoaded", function() {
+    const photoInput = document.getElementById("photo-input");
+    const ajoutClass = document.getElementById("ajout_class");
+
+    photoInput.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const img = document.createElement("img");
+            img.src = event.target.result;
+            img.alt = "Uploaded Image";
+            ajoutClass.innerHTML = ''; 
+            ajoutClass.appendChild(img); 
+        };
+
+   
+        reader.readAsDataURL(file);
+    });
+});
+
+

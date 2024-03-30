@@ -280,6 +280,17 @@ function displayWorks(works) {
 
 })
 
+
+function goBack() {
+    document.getElementById('child-modal').style.display = 'none';
+    document.getElementById('modal').style.display = 'block';
+}
+
+function closeChildModal() {
+    const childModal = document.getElementById('child-modal');
+    childModal.style.display = "none";
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const photoInput = document.getElementById("photo-input");
     const ajoutClass = document.getElementById("ajout_class");
@@ -312,5 +323,4 @@ document.addEventListener("DOMContentLoaded", function() {
         categorySelect.appendChild(option);
     });
 });
-
 

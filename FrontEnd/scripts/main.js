@@ -109,7 +109,7 @@ function getWorksByCategoryId(categoryId){
 // }
 
 function displayWorks(works) {
-    const modalDisplayStyle = getComputedStyle(modal).display; // Get the display style of the modal
+    const modalDisplayStyle = getComputedStyle(modal).display; 
     
     document.getElementById("works-container").innerHTML = "";
     for (let i = 0; i < works.length; i++) {
@@ -117,30 +117,29 @@ function displayWorks(works) {
         let workElement = document.createElement("div");
         workElement.classList.add("work-class"); 
         
-        // Create the image element
         const img = document.createElement("img");
         img.src = work.imageUrl;
         img.alt = work.title;
 
-        // Create the delete icon element
+     
         const deleteIcon = document.createElement("div");
         deleteIcon.classList.add("delete-icon");
         deleteIcon.innerHTML = "&times;";
 
-        // Add event listener to the delete icon
+     
         deleteIcon.addEventListener("click", function() {
             deleteWork(work.id);
         });
 
-        // Append image and delete icon to work element
+       
         workElement.appendChild(img);
 
-        // Conditionally append delete icon based on modal display style
+        
         if (modalDisplayStyle !== "none") {
             workElement.appendChild(deleteIcon);
         }
 
-        // Append work element to container
+      
         document.getElementById("works-container").appendChild(workElement);
     }
 }
@@ -175,6 +174,7 @@ bodyElement1.innerHTML = '<div id="modify_class" class="modify_class">'+
 '<i class="fas fa-edit" id="edit-icon"><span>modifier</span></i>'+
 '</div>'
 deleteFilter()
+closeChildModal() 
 
 }
 
@@ -192,15 +192,18 @@ function revertModeEdition() {
     let bodyElement = document.getElementById("mode_edition");
     bodyElement.innerHTML = ''
     let header = document.querySelector('header');
-        let anchorTag = header.querySelector('a');
-        anchorTag.innerHTML = "login";
-        anchorTag.setAttribute('href', '/login.html');
-      
-getCategories()
-resetModifyButton()
-
-   
+    let anchorTag = header.querySelector('a');
+    anchorTag.innerHTML = "login";
+    anchorTag.setAttribute('href', '/login.html');
+    // let filterOptions = getElementById("filter-options")
+    // filterOptions.insertFilter = insertFilter;
+    // filterOptions.insertFilter();
+    getCategories();
+    closeModal()
+    closeChildModal()
+    resetModifyButton();
 }
+
 
 function logOutButton(){
     let header = document.querySelector('header');
@@ -211,8 +214,10 @@ function logOutButton(){
         anchorTag.addEventListener('click', function(e){
             e.preventDefault()
             deleteToken()
+
         })
         return true;
+
     }
    
     return false;
@@ -233,53 +238,75 @@ function tokenExist(){
 }
 tokenExist()
 
-document.addEventListener("DOMContentLoaded", function(){
-const modal = document.getElementById("modal")
-const galleryVue = document.getElementById("galerie")
-const closeButton = document.getElementsByClassName("close")[0]
-const AjoutProjetButton = document.getElementById("ajout-projet-btn")
+document.addEventListener("DOMContentLoaded", function() {
+    const modal = document.getElementById("modal");
+    const childModal = document.getElementById("child-modal");
 
-function openModal(){
-    modal.style.display = "block"
-    getWorks().then(works => displayWorks(works));
-}
-function closeModal() {
-    modal.style.display = "none";
-}
+    const token = getToken();
 
-document.getElementById("edit-icon").addEventListener("click", openModal);
-closeButton.addEventListener("click", closeModal);
+    const editIcon = document.getElementById("edit-icon");
+    let editIconClicked = false;
 
-window.addEventListener("click", function(event) {
-    if (event.target === modal) {
-        closeModal();
+editIcon.addEventListener("click", function() {
+    editIconClicked = true;
+    if (token) {
+        openModal();
+    }
+});
+    if (token  && editIconClicked) {
+        modal.style.display = "block";
+        getWorks().then(works => displayWorks(works));
+    } else {
+        modal.style.display = "none";
+        childModal.style.display = "none";
+    }
+
+    const galleryVue = document.getElementById("galerie");
+    const closeButton = document.getElementsByClassName("close")[0];
+    const AjoutProjetButton = document.getElementById("ajout-projet-btn");
+
+    function openModal() {
+        modal.style.display = "block";
+        getWorks().then(works => displayWorks(works));
+    }
+
+    let closeModal = function closeModal() {
+        modal.style.display = "none";
+    }
+
+    document.getElementById("edit-icon").addEventListener("click", openModal);
+    closeButton.addEventListener("click", closeModal);
+
+    window.addEventListener("click", function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    AjoutProjetButton.addEventListener("click", function() {
+        childModal.style.display = "block";
+    });
+
+    function displayWorks(works) {
+        galleryVue.innerHTML = "";
+        works.forEach(work => {
+            const container = document.createElement("div");
+            container.classList.add("work-container");
+            const img = document.createElement("img");
+            img.src = work.imageUrl;
+            img.alt = work.title;
+            const deleteIcon = document.createElement("i");
+            deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
+            container.appendChild(img);
+            container.appendChild(deleteIcon);
+            galleryVue.appendChild(container);
+       });
     }
 });
 
-let childModal = document.getElementById("child-modal");
-
-AjoutProjetButton.addEventListener("click", function() {
-    childModal.style.display = "block";
-});
-
-function displayWorks(works) {
-    galleryVue.innerHTML = "";
-    works.forEach(work => {
-        const container = document.createElement("div");
-        container.classList.add("work-container");
-        const img = document.createElement("img");
-        img.src = work.imageUrl;
-        img.alt = work.title;
-        const deleteIcon = document.createElement("i");
-        deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
-        container.appendChild(img);
-        container.appendChild(deleteIcon);
-        galleryVue.appendChild(container);
-   });
+function closeModal() {
+    modal.style.display = "none";
 }
-
-})
-
 
 function goBack() {
     document.getElementById('child-modal').style.display = 'none';
@@ -323,4 +350,11 @@ document.addEventListener("DOMContentLoaded", function() {
         categorySelect.appendChild(option);
     });
 });
+
+
+
+const validerButton = document.getElementById('valider_btn');
+
+
+
 

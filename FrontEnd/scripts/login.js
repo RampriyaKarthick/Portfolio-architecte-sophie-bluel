@@ -1,3 +1,5 @@
+
+
 const loginForm = document.getElementById("loginForm");
 console.log(loginForm)
 loginForm.addEventListener("submit", function(event) {
@@ -19,7 +21,8 @@ loginForm.addEventListener("submit", function(event) {
     }
 else{
     console.log("Identifiant ou password n'est pas correct")
-}})
+}
+})
     
         .catch(error => console.error(error))
     }

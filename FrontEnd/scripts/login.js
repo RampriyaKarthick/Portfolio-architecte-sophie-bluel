@@ -21,8 +21,8 @@ loginForm.addEventListener("submit", function(event) {
     }
 else{
     console.log("Identifiant ou password n'est pas correct")
-   let loginError =  document.getElementById("login-error")
-   loginError.innerText = "Identifiant ou password n'est pas correct"
+  let loginError = document.getElementById("login-error")
+  loginError.innerText = "Identifiant ou password n'est pas correct"
 
 }
 })

@@ -67,6 +67,7 @@ margin-bottom: 0;
 	color: white;
 	padding: 10px 50px;
 	border-radius:25px;
+    border:2px solid #1D6154;
 }
 
 .modal-card-content img {

@@ -48,7 +48,7 @@
 	<section id="portfolio">
 		<div id = "mode_edition1" class="mode_edition1">
 			<h2>Mes Projets</h2>
-			<i id="edit_icon"></i>
+			
 		</div>
 		
 		<div id="filter-options">
@@ -139,33 +139,34 @@
 	</div>
 
 	<div id="child-modal" class="modal">
-		<div class="modal-content"><span>Ajout photo</span>
+		<div class="modal-content">
+			<span>Ajout photo</span>
 			<span id="back-button" class="back" onclick="goBack()"><i class="fas fa-arrow-left"></i></span>
 			<span class="close" onclick="closeChildModal()">&times;</span>
-			<div class="modal-card modal_card1" >
-				<!-- Content for adding photos -->
-				<!-- Example: Add form for uploading photos -->
-				<div id="ajout_class" class="ajout_class">
-					<i class="fas fa-camera"></i>
-					<label for="photo-input" class="file-upload-btn">+ Ajouter photo
-						<input type="file" id="photo-input" class="photo-input">
-					</label>
-					<p>jpg,png: 4mo max</p>
-				</div>
-				<div id="image-preview" class="image-preview"></div>
-				<form id="add-photos-form" class="add-photos-form" >
+			<div class="modal-card modal_card1">
+				<form id="add-photos-form" class="add-photos-form">
+					<div id="ajout_class" class="ajout_class">
+						<i class="fas fa-camera"></i>
+						<label for="photo-input" class="file-upload-btn">+ Ajouter photo
+							<input type="file" id="photo-input" class="photo-input">
+						</label>
+						<p>jpg,png: 4mo max</p>
+					</div>
+					<div id="image-preview" class="image-preview"></div>
 					<div class="add-photos-form1">
 						<label for="project-title">Titre</label><br>
 						<input type="text" id="project-title" name="project-title" required><br>
-			
 						<label for="project-category">Catégorie</label><br>
 						<select id="project-category" name="project-category" required><br>
-							<!-- Options for categories will be added dynamically via JavaScript -->
+						
 						</select><br>
 					</div>
-					
-					<button type="submit" class="valider_btn">Valider</button>
+					<button type="submit" id="valider_btn" class="valider_btn">Valider</button>
 				</form>
+			</div>
+		</div>
+	</div>
+	
 			</div>
 		</div>
 	</div>

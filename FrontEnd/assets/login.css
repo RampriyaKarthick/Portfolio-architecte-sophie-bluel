@@ -41,3 +41,8 @@ label[for="email"] ,
 label[for="password"]{
     width: 45%;
 }
+
+#login-error{
+    display: flex;
+    justify-content: center;
+}

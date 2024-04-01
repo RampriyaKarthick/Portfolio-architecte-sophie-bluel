@@ -3,6 +3,7 @@
 let apiUrl = "http://localhost:5678/api"
 let categories = []
 let token;
+let filterInserted = false;
 
 function getCategories(){
     fetch(apiUrl+"/categories")
@@ -91,60 +92,6 @@ function getWorksByCategoryId(categoryId){
 }
 
 
-
-// function displayWorks(works) {
-//     document.getElementById("works-container").innerHTML = "";
-//     for (let i = 0; i < works.length; i++) {
-//         let work = works[i];
-//         let workElement = document.createElement("div");
-//         workElement.classList.add("work-class"); 
-//         workElement.innerHTML = `
-//             <figure>
-//                 <img src="${work.imageUrl}" alt="${work.title}">
-//                 <figcaption>${work.title}</figcaption>
-//             </figure>
-//         `;
-//         document.getElementById("works-container").appendChild(workElement);
-//     }
-// }
-
-function displayWorks(works) {
-    const modalDisplayStyle = getComputedStyle(modal).display; 
-    
-    document.getElementById("works-container").innerHTML = "";
-    for (let i = 0; i < works.length; i++) {
-        let work = works[i];
-        let workElement = document.createElement("div");
-        workElement.classList.add("work-class"); 
-        
-        const img = document.createElement("img");
-        img.src = work.imageUrl;
-        img.alt = work.title;
-
-     
-        const deleteIcon = document.createElement("div");
-        deleteIcon.classList.add("delete-icon");
-        deleteIcon.innerHTML = "&times;";
-
-     
-        deleteIcon.addEventListener("click", function() {
-            deleteWork(work.id);
-        });
-
-       
-        workElement.appendChild(img);
-
-        
-        if (modalDisplayStyle !== "none") {
-            workElement.appendChild(deleteIcon);
-        }
-
-      
-        document.getElementById("works-container").appendChild(workElement);
-    }
-}
-
-
 function getToken(){
     if(localStorage.getItem("token")){
         return localStorage.getItem("token")
@@ -195,13 +142,12 @@ function revertModeEdition() {
     let anchorTag = header.querySelector('a');
     anchorTag.innerHTML = "login";
     anchorTag.setAttribute('href', '/login.html');
-    // let filterOptions = getElementById("filter-options")
-    // filterOptions.insertFilter = insertFilter;
-    // filterOptions.insertFilter();
+    
     getCategories();
     closeModal()
     closeChildModal()
     resetModifyButton();
+
 }
 
 

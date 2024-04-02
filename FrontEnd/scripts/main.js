@@ -9,12 +9,30 @@ function getCategories() {
     .then((response) => {
       console.log(response);
       categories = response;
-      insertFilter(); // Call insertFilter only when categories are fetched successfully
+      let token = getToken()
+      if(!token){
+        insertFilter(); 
+      }
+      
     })
+    .then(() =>{ const categorySelect = document.getElementById("project-category");
+console.log(categorySelect)
+console.log(document.getElementById("project-category"))
+
+    categories.forEach((category) => {
+        console.log(category)
+      const option = document.createElement("option");
+  option.value = category.id
+      option.text = category.name;
+      categorySelect.appendChild(option);
+    });
+})
     .catch((error) => {
       console.error("Error fetching categories:", error);
     });
 }
+
+
 
 function insertFilter() {
   let filterOption = document.getElementById("filter-options");
@@ -35,10 +53,10 @@ function insertFilter() {
       tous.style.backgroundColor = "#1D6154";
       tous.style.color = "white";
 
-    buttonClickedBefore.style.backgroundColor = "";
-    buttonClickedBefore.style.color = "#1D6154";
+      buttonClickedBefore.style.backgroundColor = "";
+      buttonClickedBefore.style.color = "#1D6154";
 
-    buttonClickedBefore = tous;
+      buttonClickedBefore = tous;
     });
   });
 
@@ -53,9 +71,9 @@ function insertFilter() {
       getWorksByCategoryId(categoryId);
       filterBtn.style.backgroundColor = "#1D6154";
       filterBtn.style.color = "white";
-    buttonClickedBefore.style.backgroundColor = "";
-    buttonClickedBefore.style.color = "#1D6154";
-    buttonClickedBefore = filterBtn;
+      buttonClickedBefore.style.backgroundColor = "";
+      buttonClickedBefore.style.color = "#1D6154";
+      buttonClickedBefore = filterBtn;
     });
   }
 }
@@ -117,7 +135,7 @@ function getWorksByCategoryId(categoryId) {
 // }
 
 function displayWorks(works) {
-  const modalDisplayStyle = getComputedStyle(modal).display;
+  
 
   document.getElementById("works-container").innerHTML = "";
   for (let i = 0; i < works.length; i++) {
@@ -132,6 +150,7 @@ function displayWorks(works) {
     workElement.appendChild(img);
 
     document.getElementById("works-container").appendChild(workElement);
+    
   }
 }
 
@@ -164,6 +183,17 @@ function modeEdition() {
     "</div>";
   deleteFilter();
   closeChildModal();
+  //   getWorks().then((works) => displayWorks(works));
+  getUpdatedWorks();
+}
+
+function getUpdatedWorks() {
+  getWorks().then((works) => {
+    // Check if the mode edition is active
+    if (document.getElementById("mode_edition").innerHTML !== "") {
+      displayWorks(works);
+    }
+  });
 }
 
 function resetModifyButton() {
@@ -174,6 +204,9 @@ function resetModifyButton() {
     "</div>";
 }
 
+
+
+
 function revertModeEdition() {
   let bodyElement = document.getElementById("mode_edition");
   bodyElement.innerHTML = "";
@@ -182,7 +215,7 @@ function revertModeEdition() {
   anchorTag.innerHTML = "login";
   anchorTag.setAttribute("href", "/login.html");
 
-  getCategories();
+ 
   closeModal();
   closeChildModal();
   resetModifyButton();
@@ -217,6 +250,7 @@ function tokenExist() {
 tokenExist();
 
 document.addEventListener("DOMContentLoaded", function () {
+    getCategories();
   const modal = document.getElementById("modal");
   const childModal = document.getElementById("child-modal");
 
@@ -266,6 +300,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function displayWorks(works) {
+    
+   
+const galleryVue = document.getElementById("galerie");
     galleryVue.innerHTML = "";
     works.forEach((work) => {
       const container = document.createElement("div");
@@ -275,8 +312,35 @@ document.addEventListener("DOMContentLoaded", function () {
       img.alt = work.title;
       const deleteIcon = document.createElement("i");
       deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
+      deleteIcon.addEventListener("click", function () {
+        const workIdToDelete = work.id;
+
+        // api to delete the work
+        const apiUrl = "http://localhost:5678/api/works/" + workIdToDelete;
+        const token = getToken();
+
+        fetch(apiUrl, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to delete work entry");
+            }
+            console.log("Work entry deleted successfully");
+
+            container.remove();
+          })
+          .catch((error) => {
+            console.error("Error deleting work entry:", error);
+          });
+      });
+
       container.appendChild(img);
       container.appendChild(deleteIcon);
+
       galleryVue.appendChild(container);
     });
   }
@@ -295,9 +359,10 @@ function closeChildModal() {
   const childModal = document.getElementById("child-modal");
   childModal.style.display = "none";
 }
+let photoInput = document.getElementById("photo-input");
 
 document.addEventListener("DOMContentLoaded", function () {
-  const photoInput = document.getElementById("photo-input");
+  
   const ajoutClass = document.getElementById("ajout_class");
 
   photoInput.addEventListener("change", function (event) {
@@ -317,20 +382,57 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const categories = [
-    "General",
-    "Objets",
-    "Appartments",
-    "Hotels & Restaurants",
-  ];
-  const categorySelect = document.getElementById("project-category");
-
-  categories.forEach((category) => {
-    const option = document.createElement("option");
-
-    option.text = category;
-    categorySelect.appendChild(option);
-  });
+  
+  
 });
 
-const validerButton = document.getElementById("valider_btn");
+document.addEventListener("DOMContentLoaded", function () {
+    const validerButton = document.getElementById("valider_btn");
+    const worksForm = document.getElementById("add-photos-form");
+
+    worksForm.addEventListener("submit", function (event) {
+        event.preventDefault(); 
+console.log(event)
+        // Checking if the form is filled completely
+        
+        console.log(photoInput.files[0])
+        const title = document.getElementById("project-title").value;
+        console.log(title)
+        const category = document.getElementById("project-category").value;
+        console.log(category)
+        
+        if (title && category && photoInput) {
+            validerButton.style.backgroundColor = "#1D6154"; 
+        } else {
+          
+            validerButton.style.backgroundColor = ""; 
+        }
+let formData = new FormData()
+formData.append("title", title)
+formData.append("category", category)
+formData.append("image", photoInput.files[0])
+const token = getToken();
+        fetch(apiUrl+"/works", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Failed to add work entry");
+              }
+              
+              console.log(response)
+  
+    
+            })
+            .catch((error) => {
+              console.error("Error deleting work entry:", error);
+            });
+    });
+});
+
+
+console.log(document.getElementById("photo-input"))

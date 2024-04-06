@@ -2,6 +2,10 @@ let apiUrl = "http://localhost:5678/api";
 let categories = [];
 let token;
 let filterInserted = false;
+let photoInput = document.getElementById("photo-input");
+
+
+  
 
 function getCategories() {
   fetch(apiUrl + "/categories")
@@ -12,6 +16,8 @@ function getCategories() {
       let token = getToken()
       if(!token){
         insertFilter(); 
+       getWorks().then((works) => {
+      displayWorks(works,false);})
       }
       
     })
@@ -48,7 +54,7 @@ function insertFilter() {
 
   tous.addEventListener("click", function () {
     getWorks().then((works) => {
-      displayWorks(works);
+      displayWorks(works,false);
 
       tous.style.backgroundColor = "#1D6154";
       tous.style.color = "white";
@@ -118,42 +124,6 @@ function getWorksByCategoryId(categoryId) {
     });
 }
 
-// function displayWorks(works) {
-//     document.getElementById("works-container").innerHTML = "";
-//     for (let i = 0; i < works.length; i++) {
-//         let work = works[i];
-//         let workElement = document.createElement("div");
-//         workElement.classList.add("work-class");
-//         workElement.innerHTML = `
-//             <figure>
-//                 <img src="${work.imageUrl}" alt="${work.title}">
-//                 <figcaption>${work.title}</figcaption>
-//             </figure>
-//         `;
-//         document.getElementById("works-container").appendChild(workElement);
-//     }
-// }
-
-function displayWorks(works) {
-  
-
-  document.getElementById("works-container").innerHTML = "";
-  for (let i = 0; i < works.length; i++) {
-    let work = works[i];
-    let workElement = document.createElement("div");
-    workElement.classList.add("work-class");
-
-    const img = document.createElement("img");
-    img.src = work.imageUrl;
-    img.alt = work.title;
-
-    workElement.appendChild(img);
-
-    document.getElementById("works-container").appendChild(workElement);
-    
-  }
-}
-
 function getToken() {
   if (localStorage.getItem("token")) {
     return localStorage.getItem("token");
@@ -165,6 +135,7 @@ function getToken() {
 function deleteToken() {
   localStorage.removeItem("token");
   revertModeEdition();
+  displayWorks()
 }
 
 function modeEdition() {
@@ -185,13 +156,16 @@ function modeEdition() {
   closeChildModal();
   //   getWorks().then((works) => displayWorks(works));
   getUpdatedWorks();
+
+
 }
 
 function getUpdatedWorks() {
   getWorks().then((works) => {
     // Check if the mode edition is active
     if (document.getElementById("mode_edition").innerHTML !== "") {
-      displayWorks(works);
+        displayWorks(works, false);
+
     }
   });
 }
@@ -219,6 +193,7 @@ function revertModeEdition() {
   closeModal();
   closeChildModal();
   resetModifyButton();
+ 
 }
 
 function logOutButton() {
@@ -249,6 +224,79 @@ function tokenExist() {
 }
 tokenExist();
 
+function displayWorks(works, isEditMode) {
+    const galleryVue = isEditMode ? document.getElementById("galerie") : document.getElementById("works-container");
+    galleryVue.innerHTML = "";
+
+    works.forEach((work) => {
+        const container = document.createElement("div");
+        container.classList.add(isEditMode ? "work-container" : "work-class");
+
+        const img = document.createElement("img");
+        img.src = work.imageUrl;
+        img.alt = work.title;
+
+        const deleteIcon = document.createElement("i");
+        deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
+        deleteIcon.addEventListener("click", function () {
+            const workIdToDelete = work.id;
+
+            // API call to delete the work
+            const apiUrl = "http://localhost:5678/api/works/" + workIdToDelete;
+            const token = getToken();
+
+            fetch(apiUrl, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to delete work entry");
+                }
+                console.log("Work entry deleted successfully");
+
+                // Remove the deleted work from the view
+                container.remove();
+            })
+            .catch((error) => {
+                console.error("Error deleting work entry:", error);
+            });
+        });
+
+        container.appendChild(img);
+
+        if (isEditMode) {
+            container.appendChild(deleteIcon);
+        }
+
+        galleryVue.appendChild(container);
+    });
+}
+
+function goBack() {
+    document.getElementById("child-modal").style.display = "none";
+    document.getElementById("modal").style.display = "block";
+  }
+
+  
+function closeModal() {
+    modal.style.display = "none";
+    getWorks().then((works) => {
+        displayWorks(works,false);
+    })
+
+  
+    
+  }
+  
+  function closeChildModal() {
+    const childModal = document.getElementById("child-modal");
+    childModal.style.display = "none";
+  }
+  
+
 document.addEventListener("DOMContentLoaded", function () {
     getCategories();
   const modal = document.getElementById("modal");
@@ -267,7 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   if (token && editIconClicked) {
     modal.style.display = "block";
-    getWorks().then((works) => displayWorks(works));
+    getWorks().then((works) => displayWorks(works,true));
   } else {
     modal.style.display = "none";
     childModal.style.display = "none";
@@ -279,12 +327,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function openModal() {
     modal.style.display = "block";
-    getWorks().then((works) => displayWorks(works));
+    getWorks().then((works) => displayWorks(works,true));
   }
-
-  let closeModal = function closeModal() {
-    modal.style.display = "none";
-  };
 
   document.getElementById("edit-icon").addEventListener("click", openModal);
   closeButton.addEventListener("click", closeModal);
@@ -298,78 +342,67 @@ document.addEventListener("DOMContentLoaded", function () {
   AjoutProjetButton.addEventListener("click", function () {
     childModal.style.display = "block";
   });
+  const validerButton = document.getElementById("valider_btn");
+  const worksForm = document.getElementById("add-photos-form");
 
-  function displayWorks(works) {
-    
-   
-const galleryVue = document.getElementById("galerie");
-    galleryVue.innerHTML = "";
-    works.forEach((work) => {
-      const container = document.createElement("div");
-      container.classList.add("work-container");
-      const img = document.createElement("img");
-      img.src = work.imageUrl;
-      img.alt = work.title;
-      const deleteIcon = document.createElement("i");
-      deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
-      deleteIcon.addEventListener("click", function () {
-        const workIdToDelete = work.id;
-
-        // api to delete the work
-        const apiUrl = "http://localhost:5678/api/works/" + workIdToDelete;
-        const token = getToken();
-
-        fetch(apiUrl, {
-          method: "DELETE",
+  worksForm.addEventListener("submit", function (event) {
+      event.preventDefault(); 
+console.log(event)
+      // Checking if the form is filled completely
+      
+      console.log(photoInput.files[0])
+      const title = document.getElementById("project-title").value;
+      console.log(title)
+      const category = document.getElementById("project-category").value;
+      console.log(category)
+      
+      if (title && category && photoInput) {
+          validerButton.style.backgroundColor = "#1D6154"; 
+     
+         
+          
+      } else {
+        
+          validerButton.style.backgroundColor = ""; 
+      }
+let formData = new FormData()
+formData.append("title", title)
+formData.append("category", category)
+formData.append("image", photoInput.files[0])
+const token = getToken();
+      fetch(apiUrl+"/works", {
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          body: formData
         })
           .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to delete work entry");
-            }
-            console.log("Work entry deleted successfully");
+            if (response.ok) {
+             closeChildModal()
+             closeModal()
+             document.getElementById("project-title").value = "";
+             document.getElementById("project-category").value = "";
 
-            container.remove();
+
+            }
+            
+            console.log(response)
+
+  
           })
           .catch((error) => {
             console.error("Error deleting work entry:", error);
           });
-      });
+  });
 
-      container.appendChild(img);
-      container.appendChild(deleteIcon);
-
-      galleryVue.appendChild(container);
-    });
-  }
-});
-
-function closeModal() {
-  modal.style.display = "none";
-}
-
-function goBack() {
-  document.getElementById("child-modal").style.display = "none";
-  document.getElementById("modal").style.display = "block";
-}
-
-function closeChildModal() {
-  const childModal = document.getElementById("child-modal");
-  childModal.style.display = "none";
-}
-let photoInput = document.getElementById("photo-input");
-
-document.addEventListener("DOMContentLoaded", function () {
-  
   const ajoutClass = document.getElementById("ajout_class");
 
   photoInput.addEventListener("change", function (event) {
     const file = event.target.files[0];
     const reader = new FileReader();
 
-    reader.onload = function (event) {
+      reader.onload = function (event) {
       const img = document.createElement("img");
       img.src = event.target.result;
       img.alt = "Uploaded Image";
@@ -379,60 +412,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     reader.readAsDataURL(file);
   });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  
-  
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const validerButton = document.getElementById("valider_btn");
-    const worksForm = document.getElementById("add-photos-form");
-
-    worksForm.addEventListener("submit", function (event) {
-        event.preventDefault(); 
-console.log(event)
-        // Checking if the form is filled completely
-        
-        console.log(photoInput.files[0])
-        const title = document.getElementById("project-title").value;
-        console.log(title)
-        const category = document.getElementById("project-category").value;
-        console.log(category)
-        
-        if (title && category && photoInput) {
-            validerButton.style.backgroundColor = "#1D6154"; 
-        } else {
-          
-            validerButton.style.backgroundColor = ""; 
-        }
-let formData = new FormData()
-formData.append("title", title)
-formData.append("category", category)
-formData.append("image", photoInput.files[0])
-const token = getToken();
-        fetch(apiUrl+"/works", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: formData
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Failed to add work entry");
-              }
-              
-              console.log(response)
-  
-    
-            })
-            .catch((error) => {
-              console.error("Error deleting work entry:", error);
-            });
-    });
+ 
 });
 
 
-console.log(document.getElementById("photo-input"))
+

@@ -45,4 +45,5 @@ label[for="password"]{
 #login-error{
     display: flex;
     justify-content: center;
+    color:red;
 }

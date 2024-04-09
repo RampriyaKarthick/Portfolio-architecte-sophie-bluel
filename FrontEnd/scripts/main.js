@@ -416,4 +416,9 @@ const token = getToken();
 });
 
 
+let backButton =document.getElementById("back-button")
+let closeButton = document.getElementById("close-button")
+backButton.addEventListener("click" ,goBack )
+closeButton.addEventListener("click",closeChildModal)
+
 

@@ -89,5 +89,6 @@ font-size: 22px;
 .ajout_class img{
 	display: flex;
 	justify-content: center;
-	
+	height:200px;
+	width:100px;
 }

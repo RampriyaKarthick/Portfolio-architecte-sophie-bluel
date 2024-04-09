@@ -183,6 +183,7 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+	border:2px solid #1D6154;
 }
 
 footer nav ul {
@@ -219,5 +220,10 @@ footer nav ul {
 	width:100%;
 	object-fit: cover;
 	
+}
+
+#ajout_class_img{
+	height:75px;
+	width:65px;
 }
 

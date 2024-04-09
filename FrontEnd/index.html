@@ -98,12 +98,15 @@
 	<div id="child-modal" class="modal">
 		<div class="modal-content">
 			<span>Ajout photo</span>
-			<span id="back-button" class="back" onclick="goBack()"><i class="fas fa-arrow-left"></i></span>
-			<span class="close" onclick="closeChildModal()">&times;</span>
+			<span id="back-button" class="back" ><i class="fas fa-arrow-left"></i></span>
+			<span class="close" id="close-button" >&times;</span>
 			<div class="modal-card modal_card1">
 				<form id="add-photos-form" class="add-photos-form">
 					<div id="ajout_class" class="ajout_class">
-						<img src="./assets/images/Vector.png" alt="">
+						
+							<img id="ajout_class_img" src="./assets/images/Vector.png" alt="">
+						
+						
 						<label for="photo-input" class="file-upload-btn">+ Ajouter photo
 							<input type="file" id="photo-input"  name="project-photo" class="photo-input" required>
 						</label>

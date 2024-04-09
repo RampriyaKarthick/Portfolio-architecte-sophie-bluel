@@ -14,8 +14,8 @@
 	<link rel="stylesheet" href="./assets/homepage.css">
 	<link rel="stylesheet" href="./assets/modal.css">
 	<link rel="stylesheet" href="./assets/childmodal.css">
-
-    <script src="scripts/main.js" defer ></script>
+	<script src="scripts/main.js" defer ></script>
+    
 
 </head>
 <body>
@@ -48,7 +48,7 @@
 	<section id="portfolio">
 		<div id = "mode_edition1" class="mode_edition1">
 			<h2>Mes Projets</h2>
-			
+			<div id="edit-icon"></div>
 		</div>
 		
 		<div id="filter-options">
@@ -85,7 +85,7 @@
 
 <div id="modal" class="modal">
 	<div class="modal-content"><span>Galerie photo</span>
-	<span class="close">&times;</span>
+	<span id="close" class="close">&times;</span>
 	<div class="modal-card">
 		<div id="galerie" class="modal-card-content works-container">
 
@@ -108,7 +108,7 @@
 						
 						
 						<label for="photo-input" class="file-upload-btn">+ Ajouter photo
-							<input type="file" id="photo-input"  name="project-photo" class="photo-input" required>
+							<input type="file" id="photo-input"  name="project-photo" class="photo-input">
 						</label>
 						
 						<p>jpg,png: 4mo max</p>
@@ -133,6 +133,7 @@
 	</div>
 
 </body>
+
 </html>
 
 
